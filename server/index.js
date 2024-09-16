@@ -1,13 +1,13 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-// const mongoose = require('mongoose')
-// const User = require('./models/user.models')
+const mongoose = require('mongoose')
+const User = require('./models/user.models')
 
 app.use(cors())
 app.use(express.json())
 
-// mongoose.connect('mongodb://127.0.0.1:27017/full-mern-stack-video')
+mongoose.connect('mongodb://127.0.0.1:27017/resume-craft')
 // sudo mongod --dbpath=/Users/joel/data/db
 
 app.post('/api/register', async (req, res) => {
@@ -24,18 +24,18 @@ app.post('/api/register', async (req, res) => {
     }
 })
 
-// app.post('/api/login', async (req, res) => {
-//     const user = await User.findOne({
-//         email: req.body.email,
-//         password: req.body.password
-//     })
+app.post('/api/login', async (req, res) => {
+    const user = await User.findOne({
+        email: req.body.email,
+        password: req.body.password
+    })
 
-//     if (user) {
-//         return res.json({status: 'ok', user: true})
-//     } else{
-//         return res.json({status: 'error', user: false})
-//     }
-// })
+    if (user) {
+        return res.json({status: 'ok', user: true})
+    } else{
+        return res.json({status: 'error', user: false})
+    }
+})
 
 app.get('/hello', (req, res) => {
     res.send('hello world')
