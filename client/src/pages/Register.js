@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function App() {
+function Register() {
 
   const history = useNavigate()
   const [name, setName] = useState('')
@@ -44,4 +44,4 @@ function App() {
   );
 }
 
-export default App;
+export default Register;
