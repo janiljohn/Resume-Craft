@@ -11,7 +11,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/resume-craft')
 // sudo mongod --dbpath=/Users/joel/data/db
 
 app.post('/api/register', async (req, res) => {
-    console.log(req.body)
+
     try {
         const user = await User.create({
             name: req.body.name,
@@ -41,9 +41,41 @@ app.post('/api/login', async (req, res) => {
     }
 })
 
+app.get('/api/quote', async (req, res) => {
+    
+    const token = JSON.parse(req.headers['x-access-token'])
+
+    try{
+        const email = token.email
+        const user = await User.findOne({email: email})
+        return res.json({status: 'ok', quote: user.quote})
+    } catch (error) {
+        console.log(error);
+        res.json({status: 'error', error: 'invalid user'})
+    }
+
+})
+
+app.post('/api/quote', async (req, res) => {
+    
+    const token = JSON.parse(req.headers['x-access-token'])
+
+    try{
+        const email = token.email
+        await User.updateOne({email: email}, { $set: {quote: req.body.quote}})
+        return res.json({status: 'ok'})
+    } catch (error) {
+        console.log(error);
+        res.json({status: 'error', error: 'invalid user'})
+    }
+
+})
+
 app.get('/hello', (req, res) => {
     res.send('hello world')
 })
+
+
 
 app.listen(1337, () => {
     console.log('Server started on 1337')

@@ -20,14 +20,12 @@ function App() {
     const data = await response.json()
 
     if(data.user){
-      localStorage.setItem('token', data.user)
+      localStorage.setItem('token', JSON.stringify(data.user))
       alert('Login successful')
       window.location.href = '/dashboard'
     } else {
       alert('Please check your username and password')
     }
-
-    console.log(data)
 
   }
 
