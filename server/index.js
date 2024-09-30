@@ -71,10 +71,40 @@ app.post('/api/quote', async (req, res) => {
 
 })
 
-app.get('/hello', (req, res) => {
-    res.send('hello world')
+app.get('/api/university', async (req, res) => {
+    
+    const token = JSON.parse(req.headers['x-access-token'])
+
+    try{
+        const email = token.email
+        const user = await User.findOne({email: email})
+        return res.json({status: 'ok', university: user.university})
+    } catch (error) {
+        console.log(error);
+        res.json({status: 'error', error: 'invalid user'})
+    }
+
 })
 
+app.post('/api/university', async (req, res) => {
+
+    const token = JSON.parse(req.headers['x-access-token'])
+
+    try{
+        const email = token.email
+        console.log(email)
+        console.log(typeof(JSON.stringify(req.body.university)))
+        await User.updateOne(
+            {email: email}, 
+            {$set: {university: JSON.stringify(req.body.university)}}
+        )
+        return res.json({status: 'ok'})
+    } catch (error){
+        console.log(error);
+        res.json({status: 'error', error: 'invalid user'})
+    }
+
+})
 
 
 app.listen(1337, () => {
